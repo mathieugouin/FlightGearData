@@ -1,0 +1,600 @@
+<?xml version="1.0"?>
+
+<!--
+************************************************************************
+Logitech Attack 3 joystick bindings.
+
+Justin Smithies 2006
+
+2 Axis joystick with throttle and 11 buttons.
+************************************************************************
+-->
+
+<!--
+***********[Addon to default]**********************************************
+Improved Attack 3 by pauljs75, borrows Saitek.xml 'function' idea and some other stuff.
+Special thanks to Syd from flightgear IRC, for helping with the coding.
+This is known to work with WinXP, numbering input might need modification for other OS's.
+
+mgouin:
+- Improved modifier reading
+- Modified button assignations
+-->
+
+<PropertyList>
+
+  <!-- Various possible names for this joystick -->
+  <name>default</name>
+  <name>Logitech Attack 3</name>
+  <name>Logitech Logitech Attack 3</name>
+
+  <!-- Initial nasal declarations -->
+  <nasal>
+    <script>
+    <![CDATA[
+      # Set parking brakes by default at startup so the plane does not start moving around the runway.
+      # setprop("/controls/gear/brake-parking", 1);
+
+      # Global variable for the motion & zoom
+      ########## Backup ##########
+      #JsViewPitchMotion = 6;
+      #JsViewHeadingMotion = 15;
+      #JsViewZoomVariation = 10;
+      ########## New with slewProp ##########
+      JsViewPitchMotion = 15;
+      JsViewHeadingMotion = 30;
+      JsViewZoomVariation = 20;
+      
+      # Global variable for the joystick button key hold
+      JsKeyPressed = 0;
+
+      # Set to no modifier key pressed initially.
+      JsKeyModifier1 = 0;
+      JsKeyModifier2 = 0;
+
+      # Function to get the value of the modifier.
+      # It is the binary value for the modifier 1 and modifier 2 keys combined.
+      # The output value is 0, 1, 2 or 3.
+      #     0: No button pressed
+      #     1: With button labeled "6" pressed
+      #     2: With button labeled "7" pressed
+      #     3: With both button pressed
+      #
+      # NOTE: The description of the buttons are given in this order:
+      #  - No modifier button pressed; 
+      #  - With button labeled "6" pressed; 
+      #  - With button labeled "7" pressed; 
+      #  - With both button pressed
+      #
+      GetAttack3Mod = func
+      {
+        var mod1 = JsKeyModifier1;
+        var mod2 = JsKeyModifier2;
+        
+        var mod = mod1 + (2 * mod2);
+        return mod;
+      }
+    ]]>
+    </script>
+  </nasal>
+
+  <!-- Left-Right axis -->
+  <axis n="0">
+    <desc>Aileron</desc>
+    <dead-band type="double">0.02</dead-band>
+    <binding>
+      <command>property-scale</command>
+      <property>/controls/flight/aileron</property>
+      <offset type="double">0.0</offset>
+      <factor type="double">1.0</factor>
+      <tolerance type="double">0.0</tolerance>
+      <squared type="bool">true</squared>
+      <power type="double">2.0</power>
+    </binding>
+  </axis>
+
+  <!-- Up-Down axis -->
+  <axis n="1">
+    <desc>Elevator</desc>
+    <dead-band type="double">0.02</dead-band>
+    <binding>
+      <command>property-scale</command>
+      <property>/controls/flight/elevator</property>
+      <offset type="double">0.0</offset>
+      <factor type="double">-1.0</factor>
+      <tolerance type="double">0.0</tolerance>
+      <squared type="bool">true</squared>
+      <power type="double">2.0</power>
+    </binding>
+  </axis>
+
+  <!-- Throttle axis -->
+  <axis n="2">
+    <desc>Throttle</desc>
+    <binding>
+      <command>nasal</command>
+      <script>controls.throttleAxis()</script>
+    </binding>
+  </axis>
+
+  <!-- Button labeled "6", used as a 'Modifier 1' button. -->
+  <button n="5">
+    <desc>Modifier 1</desc>
+    <repeatable type="bool">false</repeatable>
+    <binding>
+      <command>nasal</command>
+      <script>
+      <![CDATA[
+        JsKeyModifier1 = 1;
+      ]]>
+      </script>
+    </binding>
+    <mod-up>
+      <binding>
+        <command>nasal</command>
+        <script>
+        <![CDATA[
+          JsKeyModifier1 = 0;
+        ]]>
+        </script>
+      </binding>
+    </mod-up>
+  </button>
+
+  <!-- Button labeled "7", used as a 'Modifier 2' button  -->
+  <button n="6">
+    <desc>Modifier 2</desc>
+    <repeatable type="bool">false</repeatable>
+    <binding>
+      <command>nasal</command>
+      <script>
+      <![CDATA[
+        JsKeyModifier2 = 1;
+      ]]>
+      </script>
+    </binding>
+    <mod-up>
+      <binding>
+        <command>nasal</command>
+        <script>
+        <![CDATA[
+          JsKeyModifier2 = 0;
+        ]]>
+        </script>
+      </binding>
+    </mod-up>
+  </button>
+
+  <!-- Trigger a.k.a. Button "1" -->
+  <button n="0">
+    <desc>Brakes; Toggle parking brakes; Toggle landing gear; Center rudder</desc>
+    <repeatable type="bool">false</repeatable>
+    <binding>
+      <command>nasal</command>
+      <script>
+      <![CDATA[
+        var mod = GetAttack3Mod();
+        if (mod == 0)
+        {
+          controls.applyBrakes(1);
+        }
+        elsif (mod == 1)
+        {
+          # For some strange reason, parking brake is applied in the mod-up (see below...)
+        }
+        elsif (mod == 2)
+        {
+          controls.gearToggle();
+        }
+        elsif (mod == 3)
+        {
+          setprop("/controls/flight/rudder", 0);
+        }
+        JsKeyPressed = 1;
+      ]]>
+      </script>
+    </binding>
+    <mod-up>
+      <binding>
+        <command>nasal</command>
+        <script>
+        <![CDATA[
+          JsKeyPressed = 0;
+          var mod = GetAttack3Mod();
+          if (mod == 0)
+          {
+            controls.applyBrakes(0);
+          }
+          elsif (mod == 1)
+          {
+            controls.applyParkingBrake(1);
+          }
+          elsif (mod == 2)
+          {
+          }
+          elsif (mod == 3)
+          {
+          }
+        ]]>
+        </script>
+      </binding>
+    </mod-up>
+  </button>
+
+  <!-- Hat button labeled "2" -->
+  <button n="1">
+    <desc>Look down; Center view; Elevator trim down</desc>
+    <repeatable type="bool">true</repeatable>
+    <binding>
+      <command>nasal</command>
+      <script>
+      <![CDATA[
+        var mod = GetAttack3Mod();
+        if (mod == 0)
+        {
+          #if (JsKeyPressed == 0)
+          #{
+          #  setprop("/sim/current-view/pitch-offset-deg", getprop("/sim/current-view/pitch-offset-deg")-JsViewPitchMotion);
+          #}
+          controls.slewProp("/sim/current-view/pitch-offset-deg", -JsViewPitchMotion);
+        }
+        elsif (mod == 1)
+        {
+          setprop("/sim/current-view/pitch-offset-deg", -12);
+          setprop("/sim/current-view/heading-offset-deg", 0);
+        }
+        elsif (mod == 2)
+        {
+          controls.elevatorTrim(-1);
+        }
+        elsif (mod == 3)
+        {
+        }
+        JsKeyPressed = 1;
+      ]]>
+      </script>
+    </binding>
+    <mod-up>
+      <binding>
+        <command>nasal</command>
+        <script>
+        <![CDATA[
+          JsKeyPressed = 0;
+        ]]>
+        </script>
+      </binding>
+    </mod-up>
+  </button>
+
+  <!-- Hat button labeled "3" -->
+  <button n="2">
+    <desc>Look up; Zoom normal; Elevator trim up</desc>
+    <repeatable type="bool">true</repeatable>
+    <binding>
+      <command>nasal</command>
+      <script>
+      <![CDATA[
+        var mod = GetAttack3Mod();
+        if (mod == 0)
+        {
+          #if (JsKeyPressed == 0)
+          #{
+          #  setprop("/sim/current-view/pitch-offset-deg", getprop("/sim/current-view/pitch-offset-deg")+JsViewPitchMotion);
+          #}
+          controls.slewProp("/sim/current-view/pitch-offset-deg", JsViewPitchMotion);
+        }
+        elsif (mod == 1)
+        {
+          # 1280 x 1024
+          setprop("/sim/current-view/field-of-view", 73);
+          
+          # TV Screen with widescreen zoom (16:9)
+          # setprop("/sim/current-view/field-of-view", 76);
+        }
+        elsif (mod == 2)
+        {
+          controls.elevatorTrim(1);
+        }
+        elsif (mod == 3)
+        {
+        }
+        JsKeyPressed = 1;
+      ]]>
+      </script>
+    </binding>
+    <mod-up>
+      <binding>
+        <command>nasal</command>
+        <script>
+        <![CDATA[
+          JsKeyPressed = 0;
+        ]]>
+        </script>
+      </binding>
+    </mod-up>
+  </button>
+
+  <!-- Hat button labeled "4" -->
+  <button n="3">
+    <desc>Look left; Zoom out; Left aileron trim</desc>
+    <repeatable type="bool">true</repeatable>
+    <binding>
+      <command>nasal</command>
+      <script>
+      <![CDATA[
+        var mod = GetAttack3Mod();
+        if (mod == 0)
+        {
+          #if (JsKeyPressed == 0)
+          #{
+          #  setprop("/sim/current-view/heading-offset-deg", getprop("/sim/current-view/heading-offset-deg")+JsViewHeadingMotion);
+          #}
+          controls.slewProp("/sim/current-view/heading-offset-deg", JsViewHeadingMotion);
+        }
+        elsif (mod == 1)
+        {
+          #if (JsKeyPressed == 0)
+          #{
+          #  setprop("/sim/current-view/field-of-view", getprop("/sim/current-view/field-of-view")+JsViewZoomVariation);
+          #}
+          controls.slewProp("/sim/current-view/field-of-view", JsViewZoomVariation);
+        }
+        elsif (mod == 2)
+        {
+          controls.aileronTrim(-1)
+        }
+        elsif (mod == 3)
+        {
+        }
+        JsKeyPressed = 1;
+      ]]>
+      </script>
+    </binding>
+    <mod-up>
+      <binding>
+        <command>nasal</command>
+        <script>
+        <![CDATA[
+          JsKeyPressed = 0;
+        ]]>
+        </script>
+      </binding>
+    </mod-up>
+  </button>
+
+  <!-- Hat button labeled "5" -->
+  <button n="4">
+    <desc>Look right; Zoom in; Right Aileron trim</desc>
+    <repeatable type="bool">true</repeatable>
+    <binding>
+      <command>nasal</command>
+      <script>
+      <![CDATA[
+        var mod = GetAttack3Mod();
+        if (mod == 0)
+        {
+          #if (JsKeyPressed == 0)
+          #{
+          #  setprop("/sim/current-view/heading-offset-deg", getprop("/sim/current-view/heading-offset-deg")-JsViewHeadingMotion);
+          #}
+          controls.slewProp("/sim/current-view/heading-offset-deg", -JsViewHeadingMotion);
+        }
+        elsif (mod == 1)
+        {
+          #if (JsKeyPressed == 0)
+          #{
+          #  setprop("/sim/current-view/field-of-view", getprop("/sim/current-view/field-of-view")-JsViewZoomVariation);
+          #}
+          controls.slewProp("/sim/current-view/field-of-view", -JsViewZoomVariation);
+        }
+        elsif (mod == 2)
+        {
+          controls.aileronTrim(1)
+        }
+        elsif (mod == 3)
+        {
+        }
+        JsKeyPressed = 1;
+      ]]>
+      </script>
+    </binding>
+    <mod-up>
+      <binding>
+        <command>nasal</command>
+        <script>
+        <![CDATA[
+          JsKeyPressed = 0;
+        ]]>
+        </script>
+      </binding>
+    </mod-up>
+  </button>
+
+  <!-- Button labeled "8" -->
+  <button n="7">
+    <desc>Rudder left; Rudder left fast; Left brake</desc>
+    <repeatable type="bool">true</repeatable>
+    <binding>
+      <command>nasal</command>
+      <script>
+      <![CDATA[
+        var mod = GetAttack3Mod();
+        if (mod == 0)
+        {
+          # 4 sec to go from center to full left.
+          controls.slewProp("/controls/flight/rudder", -0.25);
+        }
+        elsif (mod == 1)
+        {
+          # 0.5 sec to go from center to full left.
+          controls.slewProp("/controls/flight/rudder", -2);
+        }
+        elsif (mod == 2)
+        {
+          if (JsKeyPressed == 0)
+          {
+            # Must be called only once to start braking
+            controls.applyBrakes(1, -1);
+          }
+        }
+        elsif (mod == 3)
+        {
+        }
+        JsKeyPressed = 1;
+      ]]>
+      </script>
+    </binding>
+    <mod-up>
+      <binding>
+        <command>nasal</command>
+        <script>
+        <![CDATA[
+          JsKeyPressed = 0;
+
+          # Turn brake off independently of the mod if the modified key is released before the brake key.
+          controls.applyBrakes(0, -1);
+        ]]>
+        </script>
+      </binding>
+    </mod-up>
+  </button>
+
+  <!-- Button labeled "9" -->
+  <button n="8">
+    <desc>Rudder right; Center rudder; Right brake</desc>
+    <repeatable type="bool">true</repeatable>
+    <binding>
+      <command>nasal</command>
+      <script>
+      <![CDATA[
+        var mod = GetAttack3Mod();
+        if (mod == 0)
+        {
+          # 4 sec to go from center to full right.
+          controls.slewProp("/controls/flight/rudder", 0.25);
+        }
+        elsif (mod == 1)
+        {
+          # 0.5 sec to go from center to full left.
+          controls.slewProp("/controls/flight/rudder", 2);
+        }
+        elsif (mod == 2)
+        {
+          if (JsKeyPressed == 0)
+          {
+            # Must be called only once to start braking
+            controls.applyBrakes(1, 1);
+          }
+        }
+        elsif (mod == 3)
+        {
+        }
+        JsKeyPressed = 1;
+      ]]>
+      </script>
+    </binding>
+    <mod-up>
+      <binding>
+        <command>nasal</command>
+        <script>
+        <![CDATA[
+          JsKeyPressed = 0;
+
+          # Turn brake off independently of the mod if the modified key is released before the brake key.
+          controls.applyBrakes(0, 1);
+        ]]>
+        </script>
+      </binding>
+    </mod-up>
+  </button>
+
+  <!-- Button labeled "10" -->
+  <button n="9">
+    <desc>Flaps down; Mixture leaner; Propeller lower RPM (coarser)</desc>
+    <repeatable>true</repeatable>
+    <binding>
+      <command>nasal</command>
+      <script>
+      <![CDATA[
+        var mod = GetAttack3Mod();
+        if (mod == 0)
+        {
+          if (JsKeyPressed == 0)
+          {
+            controls.flapsDown(1)
+          }
+        }
+        elsif (mod == 1)
+        {
+          controls.adjMixture(-0.25);
+        }
+        elsif (mod == 2)
+        {
+          controls.adjPropeller(-0.25);
+        }
+        elsif (mod == 3)
+        {
+        }
+        JsKeyPressed = 1;
+      ]]>
+      </script>
+    </binding>
+    <mod-up>
+      <binding>
+        <command>nasal</command>
+        <script>
+        <![CDATA[
+          JsKeyPressed = 0;
+        ]]>
+        </script>
+      </binding>
+    </mod-up>
+  </button>
+
+  <!-- Button labeled "11" -->
+  <button n="10">
+    <desc>Flaps up; Mixture richer; Propeller higher RPM (finer)</desc>
+    <repeatable>true</repeatable>
+    <binding>
+      <command>nasal</command>
+      <script>
+      <![CDATA[
+        var mod = GetAttack3Mod();
+        if (mod == 0)
+        {
+          if (JsKeyPressed == 0)
+          {
+            controls.flapsDown(-1)
+          }
+        }
+        elsif (mod == 1)
+        {
+          controls.adjMixture(0.25);
+        }
+        elsif (mod == 2)
+        {
+          controls.adjPropeller(0.25);
+        }
+        elsif (mod == 3)
+        {
+        }
+        JsKeyPressed = 1;
+      ]]>
+      </script>
+    </binding>
+    <mod-up>
+      <binding>
+        <command>nasal</command>
+        <script>
+        <![CDATA[
+          JsKeyPressed = 0;
+        ]]>
+        </script>
+      </binding>
+    </mod-up>
+  </button>
+
+</PropertyList>
+
+<!-- end of file -->
+
