@@ -3,7 +3,9 @@
 <!--
 ************************************************************************
 Logitech Attack 3 joystick bindings.
+
 Justin Smithies 2006
+
 2 Axis joystick with throttle and 11 buttons.
 ************************************************************************
 -->
@@ -34,15 +36,25 @@ mgouin:
       # setprop("/controls/gear/brake-parking", 1);
 
       # Global variable for the motion & zoom
-      ########## Backup ##########
-      #JsViewPitchMotion = 6;
-      #JsViewHeadingMotion = 15;
-      #JsViewZoomVariation = 10;
-      ########## New with slewProp ##########
-      JsViewPitchMotion = 15;
-      JsViewHeadingMotion = 30;
-      JsViewZoomVariation = 20;
+      JsViewZoomVariation = 25;
+
+      # Pitch & Heading are slewed by a factor of the field-of-view.
+      # This allow for easier adjustment at high zoom (small FOV).
+      #
+      # "Calibration": At FOV=73, 40 pitch & heading slew.
+      GetViewSlewRate = func
+      {
+        return getprop("/sim/current-view/field-of-view") * 35.0 / 73.0;
+      }
       
+      # Utility function to clamp value.  Is this available elsewhere?
+      CapValueMinMax = func(prop, min, max)
+      {
+        var v = getprop(prop);
+        setprop(prop, math.clamp(v, min, max));
+        return getprop(prop); # must read again because of clamping
+      }
+
       # Global variable for the joystick button key hold
       JsKeyPressed = 0;
 
@@ -230,11 +242,7 @@ mgouin:
         var mod = GetAttack3Mod();
         if (mod == 0)
         {
-          #if (JsKeyPressed == 0)
-          #{
-          #  setprop("/sim/current-view/pitch-offset-deg", getprop("/sim/current-view/pitch-offset-deg")-JsViewPitchMotion);
-          #}
-          controls.slewProp("/sim/current-view/pitch-offset-deg", -JsViewPitchMotion);
+          controls.slewProp("/sim/current-view/pitch-offset-deg", -GetViewSlewRate());
         }
         elsif (mod == 1)
         {
@@ -243,7 +251,7 @@ mgouin:
         }
         elsif (mod == 2)
         {
-          controls.elevatorTrim(-1);
+          controls.elevatorTrim(-0.75);
         }
         elsif (mod == 3)
         {
@@ -275,11 +283,7 @@ mgouin:
         var mod = GetAttack3Mod();
         if (mod == 0)
         {
-          #if (JsKeyPressed == 0)
-          #{
-          #  setprop("/sim/current-view/pitch-offset-deg", getprop("/sim/current-view/pitch-offset-deg")+JsViewPitchMotion);
-          #}
-          controls.slewProp("/sim/current-view/pitch-offset-deg", JsViewPitchMotion);
+          controls.slewProp("/sim/current-view/pitch-offset-deg", GetViewSlewRate());
         }
         elsif (mod == 1)
         {
@@ -291,7 +295,7 @@ mgouin:
         }
         elsif (mod == 2)
         {
-          controls.elevatorTrim(1);
+          controls.elevatorTrim(0.75);
         }
         elsif (mod == 3)
         {
@@ -323,19 +327,12 @@ mgouin:
         var mod = GetAttack3Mod();
         if (mod == 0)
         {
-          #if (JsKeyPressed == 0)
-          #{
-          #  setprop("/sim/current-view/heading-offset-deg", getprop("/sim/current-view/heading-offset-deg")+JsViewHeadingMotion);
-          #}
-          controls.slewProp("/sim/current-view/heading-offset-deg", JsViewHeadingMotion);
+          controls.slewProp("/sim/current-view/heading-offset-deg", GetViewSlewRate());
         }
         elsif (mod == 1)
         {
-          #if (JsKeyPressed == 0)
-          #{
-          #  setprop("/sim/current-view/field-of-view", getprop("/sim/current-view/field-of-view")+JsViewZoomVariation);
-          #}
           controls.slewProp("/sim/current-view/field-of-view", JsViewZoomVariation);
+          CapValueMinMax("/sim/current-view/field-of-view", 1.0, 150.0);
         }
         elsif (mod == 2)
         {
@@ -371,19 +368,12 @@ mgouin:
         var mod = GetAttack3Mod();
         if (mod == 0)
         {
-          #if (JsKeyPressed == 0)
-          #{
-          #  setprop("/sim/current-view/heading-offset-deg", getprop("/sim/current-view/heading-offset-deg")-JsViewHeadingMotion);
-          #}
-          controls.slewProp("/sim/current-view/heading-offset-deg", -JsViewHeadingMotion);
+          controls.slewProp("/sim/current-view/heading-offset-deg", -GetViewSlewRate());
         }
         elsif (mod == 1)
         {
-          #if (JsKeyPressed == 0)
-          #{
-          #  setprop("/sim/current-view/field-of-view", getprop("/sim/current-view/field-of-view")-JsViewZoomVariation);
-          #}
           controls.slewProp("/sim/current-view/field-of-view", -JsViewZoomVariation);
+          CapValueMinMax("/sim/current-view/field-of-view", 1.0, 150.0);
         }
         elsif (mod == 2)
         {
@@ -508,7 +498,7 @@ mgouin:
 
   <!-- Button labeled "10" -->
   <button n="9">
-    <desc>Flaps down; Mixture leaner; Propeller lower RPM (coarser)</desc>
+    <desc>Flaps down; Mixture leaner; Propeller lower RPM (coarser); Deploy Spoiler</desc>
     <repeatable>true</repeatable>
     <binding>
       <command>nasal</command>
@@ -532,6 +522,10 @@ mgouin:
         }
         elsif (mod == 3)
         {
+          if (JsKeyPressed == 0)
+          {
+            controls.stepSpoilers(1);
+          }
         }
         JsKeyPressed = 1;
       ]]>
@@ -543,6 +537,7 @@ mgouin:
         <script>
         <![CDATA[
           JsKeyPressed = 0;
+          controls.stepSpoilers(0);
         ]]>
         </script>
       </binding>
@@ -551,7 +546,7 @@ mgouin:
 
   <!-- Button labeled "11" -->
   <button n="10">
-    <desc>Flaps up; Mixture richer; Propeller higher RPM (finer)</desc>
+    <desc>Flaps up; Mixture richer; Propeller higher RPM (finer); Retract Spoiler</desc>
     <repeatable>true</repeatable>
     <binding>
       <command>nasal</command>
@@ -575,6 +570,10 @@ mgouin:
         }
         elsif (mod == 3)
         {
+          if (JsKeyPressed == 0)
+          {
+            controls.stepSpoilers(-1);
+          }
         }
         JsKeyPressed = 1;
       ]]>
@@ -586,6 +585,7 @@ mgouin:
         <script>
         <![CDATA[
           JsKeyPressed = 0;
+          controls.stepSpoilers(0);
         ]]>
         </script>
       </binding>
@@ -595,4 +595,3 @@ mgouin:
 </PropertyList>
 
 <!-- end of file -->
-
