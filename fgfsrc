@@ -3,15 +3,19 @@
 #--fg-root=/usr/share/games/flightgear
 
 --fg-aircraft=/home/mgouin/Documents/FG/Aircrafts/c172p
-#--fg-aircraft=/home/mgouin/Documents/FG/Aircrafts
+--fg-aircraft=/home/mgouin/Documents/FG/Aircrafts
 
 ### Aircraft
-#--aircraft=c172p
---aircraft=c182s
+--aircraft=c172p
+#--aircraft=c182s
 #--aircraft=SenecaII
 #--aircraft=707
 #--aircraft=777-300
 #--aircraft=f15c
+
+### Helicopter
+#--aircraft=ec130b4
+#--aircraft=ec135p2
 
 ### Equipment
 --nav1=116.3
@@ -23,7 +27,8 @@
 #--airport=CYMX
 #--airport=CYUL
 --airport=CYHU
-#--runway=06L
+#--airport=SE4
+--runway=06L
  
 ######################################################################
 #Time Options
@@ -36,24 +41,18 @@
 #Environment Options
 --season=summer
 
+# Either:
 --enable-real-weather-fetch
-
 #--disable-real-weather-fetch
+
   #Conditions for VFR training
-#--metar=CYHU 011700Z 00000KT 30SM CLR 14/07 A2992
+#--metar=XXXX 011700Z 00000KT 30SM FEW050 FEW150 20/14 A3017
 
   #Conditions for VFR windy training
-#--metar="CYHU 011700Z 33020KT 15SM CLR 14/07 A2992"
+#--metar=XXXX 011700Z 33020KT 15SM FEW050 FEW150 14/07 A3017
 
   #Conditions for IFR training
-#--metar="CYHU 011700Z 00000KT 3SM OVC5 14/07 A2992"
-
-#--ceiling=750:3000
-#--visibility-miles=3
-#--prop:/environment/weather-scenario=none
-
-#--wind=330@20
-#--turbulence=0.0
+#--metar=XXXX 011700Z 00000KT 3SM BR OVC005 14/07 A2992
 
 ######################################################################
 ### Rendering Options
