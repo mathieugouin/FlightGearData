@@ -28,28 +28,34 @@
 #--airport=CYUL
 --airport=CYHU
 #--airport=SE4
+#--airport=CYQB
+#--airport=KFSO
 --runway=06L
- 
+
+# Test w/o scenery
+#--airport=KLAX
+
 ######################################################################
 #Time Options
-#--time-match-local
-# noon is easier on the graphics
---timeofday=noon
-     # dawn,noon,dusk,midnight
+--time-match-local
+
+# dawn,morning,noon,afternoon,dusk,evening,midnight
+#--timeofday=noon
 
 ######################################################################
 #Environment Options
 --season=summer
+#--season=winter
 
 # Either:
 --enable-real-weather-fetch
 #--disable-real-weather-fetch
 
   #Conditions for VFR training
-#--metar=XXXX 011700Z 00000KT 30SM FEW050 FEW150 20/14 A3017
+#--metar=XXXX 011700Z 00000KT 30SM CLR 20/14 A2992
 
   #Conditions for VFR windy training
-#--metar=XXXX 011700Z 33020KT 15SM FEW050 FEW150 14/07 A3017
+#--metar=XXXX 011700Z 33020KT 15SM FEW080 SCT150 14/07 A3017
 
   #Conditions for IFR training
 #--metar=XXXX 011700Z 00000KT 3SM BR OVC005 14/07 A2992
@@ -69,7 +75,6 @@
 --prop:/sim/rendering/random-buildings=0
 --prop:/sim/rendering/random-vegetation=false
 --disable-distance-attenuation
---disable-enhanced-lighting
 --disable-specular-highlight
 --prop:/sim/rendering/quality-level=0
 --prop:/sim/rendering/shaders/quality-level=0
@@ -81,12 +86,13 @@
 #Multiplayer Options
 # use http://mpmap02.flightgear.org/
 --callsign=MGOUIN
---multiplay=out,1,mpserver02.flightgear.org,5000
+# multiplay={in|out},Hz,address,port
+--multiplay=out,1,mpserver16.flightgear.org,5000
 #--httpd=8080
 
 ### System
+# alert,warn,info,debug
 --log-level=warn
-## alert,warn,info,debug
 --enable-fullscreen
 --bpp=16
 #--control=joystick
