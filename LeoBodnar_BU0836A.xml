@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--
+    Leo Bodnar BU0836A Interface board
+
+    This board is meant to correct the deadzone problem of the Saitek Pro Flight Yoke.
+    This board provides only the Pitch & Roll axis, the remaining are still provided by the Saitek.
+
+    Copyright (C) 2018  Mathieu Gouin (mgouin@gmail.com)
+    This file is released under the GPL license.
+-->
+<PropertyList>
+    <name>Leo Bodnar BU0836A Interface</name>
+
+    <axis n="0">
+        <desc>Aileron</desc>
+        <dead-band type="double">0.0</dead-band>
+        <binding>
+            <command>property-scale</command>
+            <property>/controls/flight/aileron</property>
+            <offset type="double">0.0</offset>
+            <factor type="double">1.0</factor>
+            <power type="double">1.0</power>
+        </binding>
+    </axis>
+    <axis n="1">
+        <desc>Elevator</desc>
+        <dead-band type="double">0.0</dead-band>
+        <binding>
+            <command>property-scale</command>
+            <property>/controls/flight/elevator</property>
+            <offset type="double">0.0</offset>
+            <factor type="double">1.0</factor>
+            <power type="double">1.0</power>
+        </binding>
+    </axis>
+</PropertyList>
