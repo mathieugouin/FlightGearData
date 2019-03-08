@@ -91,7 +91,7 @@ mgouin:
   <!-- Left-Right axis -->
   <axis n="0">
     <desc>Aileron</desc>
-    <dead-band type="double">0.02</dead-band>
+    <dead-band type="double">0.0</dead-band>
     <binding>
       <command>property-scale</command>
       <property>/controls/flight/aileron</property>
@@ -106,7 +106,7 @@ mgouin:
   <!-- Up-Down axis -->
   <axis n="1">
     <desc>Elevator</desc>
-    <dead-band type="double">0.02</dead-band>
+    <dead-band type="double">0.0</dead-band>
     <binding>
       <command>property-scale</command>
       <property>/controls/flight/elevator</property>
@@ -595,3 +595,4 @@ mgouin:
 </PropertyList>
 
 <!-- end of file -->
+
