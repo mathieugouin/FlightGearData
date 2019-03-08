@@ -1,17 +1,26 @@
 # FlightGear
 # $HOME/.fgfsrc
 #--fg-root=/usr/share/games/flightgear
-
---fg-aircraft=/home/mgouin/Documents/FG/Aircrafts/c172p
 --fg-aircraft=/home/mgouin/Documents/FG/Aircrafts
 
-### Aircraft
+######################################################################
+# Aircraft
+#--aircraft=ufo
+#--aircraft=c152
 --aircraft=c172p
 #--aircraft=c182s
 #--aircraft=SenecaII
+#--aircraft=dhc6
+#--aircraft=b1900d
+#--aircraft=Citation-II
 #--aircraft=707
+#--aircraft=737-300
+#--aircraft=737-800YV
 #--aircraft=777-300
+#--aircraft=f-14b
 #--aircraft=f15c
+#--aircraft=f16-block-52
+#--aircraft=f16-block-60
 
 ### Helicopter
 #--aircraft=ec130b4
@@ -23,45 +32,47 @@
 --adf1=407
 
 ######################################################################
-### Initial position
-#--airport=CYMX
-#--airport=CYUL
---airport=CYHU
-#--airport=SE4
-#--airport=CYQB
-#--airport=KFSO
---runway=06L
+# Initial position
+#--airport=CYHU
+--airport=CYJN
 
-# Test w/o scenery
-#--airport=KLAX
+#--airport=CYUL
+#--airport=CYMX
+#--airport=PHNL
+
+#--runway=06L
+#--runway=24R
 
 ######################################################################
-#Time Options
---time-match-local
+# Time Options
+#--time-match-local
 
 # dawn,morning,noon,afternoon,dusk,evening,midnight
-#--timeofday=noon
+--timeofday=noon
 
 ######################################################################
-#Environment Options
---season=summer
-#--season=winter
+# Environment Options
+#--season=summer
+--season=winter
 
 # Either:
 --enable-real-weather-fetch
 #--disable-real-weather-fetch
 
-  #Conditions for VFR training
-#--metar=XXXX 011700Z 00000KT 30SM CLR 20/14 A2992
+  #Conditions for VFR summer training
+#--metar=XXXX 011700Z 00000KT 15SM FEW150 20/14 A2992
+
+  #Conditions for VFR winter training
+#--metar=XXXX 011700Z 00000KT 15SM FEW150 M10/M18 A2992
 
   #Conditions for VFR windy training
-#--metar=XXXX 011700Z 33020KT 15SM FEW080 SCT150 14/07 A3017
+#--metar=XXXX 011700Z 33020KT 15SM SCT080 SCT150 14/07 A3017
 
   #Conditions for IFR training
 #--metar=XXXX 011700Z 00000KT 3SM BR OVC005 14/07 A2992
 
 ######################################################################
-### Rendering Options
+# Rendering Options
 --disable-horizon-effect
 --disable-ai-models
 --disable-ai-traffic
@@ -79,20 +90,23 @@
 --prop:/sim/rendering/quality-level=0
 --prop:/sim/rendering/shaders/quality-level=0
 --max-fps=30
---disable-terrasync
+#--disable-terrasync
+--enable-terrasync
 --disable-auto-coordination
 
 ######################################################################
-#Multiplayer Options
-# use http://mpmap02.flightgear.org/
+# Multiplayer Options
+# use http://mpmap02.flightgear.org/v3/
+# use http://mpmap03.flightgear.org/
 --callsign=MGOUIN
 # multiplay={in|out},Hz,address,port
---multiplay=out,1,mpserver16.flightgear.org,5000
+--multiplay=out,10,mpserver01.flightgear.org,5000
 #--httpd=8080
 
-### System
+######################################################################
+# System
 # alert,warn,info,debug
---log-level=warn
+--log-level=alert
 --enable-fullscreen
 --bpp=16
 #--control=joystick
@@ -102,3 +116,17 @@
 --prop:/sim/rendering/multi-sample-buffers=false
 --prop:/sim/rendering/multi-samples=0
 --disable-rembrandt
+
+################################################################
+# terrasync server overrides.
+# FG will use the uncommented entry for terrasync.
+# remember to uncomment only one entry at a time.
+################################################################
+#--prop:/sim/terrasync/http-server=automatic
+--prop:/sim/terrasync/http-server=http://flightgear.sourceforge.net/scenery
+#--prop:/sim/terrasync/http-server=http://fgfs.goneabitbursar.com/terrascenery
+#--prop:/sim/terrasync/http-server=http://ns334561.ip-5-196-65.eu/terrasync
+#--prop:/sim/terrasync/http-server=https://ukmirror.flightgear.org/fgscenery
+#--prop:/sim/terrasync/http-server=https://dream.t3r.de/fgscenery
+#--prop:/sim/terrasync/http-server=https://mpserver16.flightgear.org/scenery
+################################################################
