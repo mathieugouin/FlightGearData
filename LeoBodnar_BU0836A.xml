@@ -9,7 +9,7 @@
     This file is released under the GPL license.
 -->
 <PropertyList>
-    <name>Leo Bodnar BU0836A Interface</name>
+    <name>Leo Bodnar BU0836 Interface</name>
 
     <axis n="0">
         <desc>Aileron</desc>
@@ -18,8 +18,8 @@
             <command>property-scale</command>
             <property>/controls/flight/aileron</property>
             <offset type="double">0.0</offset>
-            <factor type="double">1.0</factor>
-            <power type="double">1.0</power>
+            <factor type="double">0.6</factor>
+            <power type="double">2.0</power>
         </binding>
     </axis>
     <axis n="1">
@@ -29,8 +29,8 @@
             <command>property-scale</command>
             <property>/controls/flight/elevator</property>
             <offset type="double">0.0</offset>
-            <factor type="double">1.0</factor>
-            <power type="double">1.0</power>
+            <factor type="double">-1.0</factor>
+            <power type="double">2.0</power>
         </binding>
     </axis>
 </PropertyList>
