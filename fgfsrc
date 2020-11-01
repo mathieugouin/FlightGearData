@@ -6,6 +6,7 @@
 ######################################################################
 # Aircraft
 #--aircraft=ufo
+#--aircraft=c150
 #--aircraft=c152
 --aircraft=c172p
 #--aircraft=c182s
@@ -17,6 +18,7 @@
 #--aircraft=737-300
 #--aircraft=737-800YV
 #--aircraft=777-300
+
 #--aircraft=f-14b
 #--aircraft=f15c
 #--aircraft=f16-block-52
@@ -33,15 +35,31 @@
 
 ######################################################################
 # Initial position
-#--airport=CYHU
---airport=CYJN
+
+--airport=CYHU
+#--airport=CSU3
+#--airport=SE4
+#--airport=CYLQ
+
+#--airport=KBOS
+
+#--airport=KOGS
 
 #--airport=CYUL
 #--airport=CYMX
 #--airport=PHNL
 
-#--runway=06L
+# Long
+--runway=06L
 #--runway=24R
+
+# Short
+#--runway=06R
+#--runway=24L
+
+# Diagonal
+#--runway=10
+#--runway=28
 
 ######################################################################
 # Time Options
@@ -52,8 +70,8 @@
 
 ######################################################################
 # Environment Options
-#--season=summer
---season=winter
+--season=summer
+#--season=winter
 
 # Either:
 --enable-real-weather-fetch
@@ -121,12 +139,20 @@
 # terrasync server overrides.
 # FG will use the uncommented entry for terrasync.
 # remember to uncomment only one entry at a time.
+# dig terrasync.flightgear.org ANY
 ################################################################
+# Not OK
 #--prop:/sim/terrasync/http-server=automatic
---prop:/sim/terrasync/http-server=http://flightgear.sourceforge.net/scenery
+# Not OK
+#--prop:/sim/terrasync/http-server=https://ukmirror.flightgear.org/fgscenery
+# OK
+#--prop:/sim/terrasync/http-server=https://dream.t3r.de/fgscenery
+# OK
+--prop:/sim/terrasync/http-server=https://mpserver16.flightgear.org/scenery
+# OK
+#--prop:/sim/terrasync/http-server=http://flightgear.sourceforge.net/scenery
+# Disabled
 #--prop:/sim/terrasync/http-server=http://fgfs.goneabitbursar.com/terrascenery
 #--prop:/sim/terrasync/http-server=http://ns334561.ip-5-196-65.eu/terrasync
-#--prop:/sim/terrasync/http-server=https://ukmirror.flightgear.org/fgscenery
-#--prop:/sim/terrasync/http-server=https://dream.t3r.de/fgscenery
-#--prop:/sim/terrasync/http-server=https://mpserver16.flightgear.org/scenery
 ################################################################
+
