@@ -39,15 +39,8 @@
 --airport=CYHU
 #--airport=CSU3
 #--airport=SE4
-#--airport=CYLQ
-
-#--airport=KBOS
-
-#--airport=KOGS
-
 #--airport=CYUL
 #--airport=CYMX
-#--airport=PHNL
 
 # Long
 --runway=06L
