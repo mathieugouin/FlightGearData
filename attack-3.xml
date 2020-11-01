@@ -96,7 +96,7 @@ mgouin:
       <command>property-scale</command>
       <property>/controls/flight/aileron</property>
       <offset type="double">0.0</offset>
-      <factor type="double">1.0</factor>
+      <factor type="double">0.6</factor>
       <power type="double">2.0</power>
     </binding>
   </axis>
@@ -109,7 +109,7 @@ mgouin:
       <command>property-scale</command>
       <property>/controls/flight/elevator</property>
       <offset type="double">0.0</offset>
-      <factor type="double">-1.0</factor>
+      <factor type="double">-0.6</factor>
       <power type="double">2.0</power>
     </binding>
   </axis>
