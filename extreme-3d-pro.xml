@@ -124,7 +124,7 @@ $Id$
       <property>/controls/flight/rudder</property>
       <offset type="double">0.0</offset>
       <factor type="double">1.0</factor>
-      <power type="double">3.0</power>
+      <power type="double">2.0</power>
     </binding>
   </axis>
 
@@ -616,11 +616,8 @@ $Id$
         var mod = GetAttack3Mod();
         if (mod == 0)
         {
-          if (JsKeyPressed == 0)
-          {
-            # Must be called only once to start braking
-            controls.applyBrakes(1, -1);
-          }
+          # Must be called only once to start braking
+          controls.applyBrakes(1, -1);
         }
         elsif (mod == 1)
         {
@@ -631,7 +628,6 @@ $Id$
         elsif (mod == 3)
         {
         }
-        JsKeyPressed = 1;
       ]]>
       </script>
     </binding>
@@ -640,7 +636,6 @@ $Id$
         <command>nasal</command>
         <script>
         <![CDATA[
-          JsKeyPressed = 0;
           # Turn brake off independently of the mod if the modified key is released before the brake key.
           controls.applyBrakes(0, -1);
         ]]>
@@ -660,11 +655,8 @@ $Id$
         var mod = GetAttack3Mod();
         if (mod == 0)
         {
-          if (JsKeyPressed == 0)
-          {
-            # Must be called only once to start braking
-            controls.applyBrakes(1, 1);
-          }
+          # Must be called only once to start braking
+          controls.applyBrakes(1, 1);
         }
         elsif (mod == 1)
         {
@@ -675,7 +667,6 @@ $Id$
         elsif (mod == 3)
         {
         }
-        JsKeyPressed = 1;
       ]]>
       </script>
     </binding>
@@ -684,7 +675,6 @@ $Id$
         <command>nasal</command>
         <script>
         <![CDATA[
-          JsKeyPressed = 0;
           # Turn brake off independently of the mod if the modified key is released before the brake key.
           controls.applyBrakes(0, 1);
         ]]>
