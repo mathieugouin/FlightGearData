@@ -616,7 +616,6 @@ $Id$
         var mod = GetAttack3Mod();
         if (mod == 0)
         {
-          # Must be called only once to start braking
           controls.applyBrakes(1, -1);
         }
         elsif (mod == 1)
@@ -655,7 +654,6 @@ $Id$
         var mod = GetAttack3Mod();
         if (mod == 0)
         {
-          # Must be called only once to start braking
           controls.applyBrakes(1, 1);
         }
         elsif (mod == 1)
