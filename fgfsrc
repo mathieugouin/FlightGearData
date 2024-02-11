@@ -1,16 +1,23 @@
 # FlightGear
+
+# jscal-restore /dev/input/js0
+
 # $HOME/.fgfsrc
 #--fg-root=/usr/share/games/flightgear
 --fg-aircraft=/home/mgouin/Documents/FG/Aircrafts
 
 ######################################################################
 # Aircraft
+# Note: the aircraft name corresponds to the file name of the -set.xml
+#
+### Airplane
 #--aircraft=ufo
 #--aircraft=c150
 #--aircraft=c152
---aircraft=c172p
+#--aircraft=c172p
 #--aircraft=c182s
 #--aircraft=SenecaII
+#--aircraft=KingAir-350
 #--aircraft=dhc6
 #--aircraft=b1900d
 #--aircraft=Citation-II
@@ -19,14 +26,34 @@
 #--aircraft=737-800YV
 #--aircraft=777-300
 
+### Military
+#--aircraft=sopwithCamel-YASim
+#--aircraft=sopwithCamel-JSBSim-Bombable
+#--aircraft=spitfireIIa
+#--aircraft=spitfireVb
+
+    # } to start engine
+#--aircraft=Harrier-GR3
+
+    # Ref fg f14 wiki
 #--aircraft=f-14b
 #--aircraft=f15c
 #--aircraft=f16-block-52
 #--aircraft=f16-block-60
+#--aircraft=F-18C_Hornet
+--aircraft=Blackbird-A
+#--aircraft=Blackbird-B
+#--aircraft=MiG-29_9-12
 
 ### Helicopter
 #--aircraft=ec130b4
 #--aircraft=ec135p2
+
+    # Auto start in menu + arm + j to release sea snorkel
+#--aircraft=AirCrane
+
+  # Shift n, }
+#--aircraft=ch53eSuperStallion
 
 ### Equipment
 --nav1=116.3
@@ -36,14 +63,33 @@
 ######################################################################
 # Initial position
 
---airport=CYHU
-#--airport=CSU3
-#--airport=SE4
+#--airport=CYHU
 #--airport=CYUL
 #--airport=CYMX
 
+# St-Hyacinthe
+#--airport=CSU3
+
+# Lachute
+#--airport=SE4
+
+# Drummondville
+#--airport=CSC3
+
+# Louiseville
+#--airport=CSJ4
+
+# Lake Placid
+#--airport=KLKP
+
+# Grand Canyon
+--airport=KGCN
+
+# Innsbruck (Alps)
+#--airport=LOWI
+
 # Long
---runway=06L
+#--runway=06L
 #--runway=24R
 
 # Short
@@ -53,6 +99,9 @@
 # Diagonal
 #--runway=10
 #--runway=28
+
+#--runway=06
+--runway=03
 
 ######################################################################
 # Time Options
@@ -85,8 +134,16 @@
 ######################################################################
 # Rendering Options
 --disable-horizon-effect
---disable-ai-models
+
+#--enable-ai-traffic
 --disable-ai-traffic
+
+#--disable-ai-models
+--enable-ai-models
+
+# AI scenario: xml files in /usr/share/games/flightgear/AI
+--ai-scenario=mgouin_ai
+
 --enable-clouds
 --disable-clouds3d
 --shading-flat
@@ -101,8 +158,6 @@
 --prop:/sim/rendering/quality-level=0
 --prop:/sim/rendering/shaders/quality-level=0
 --max-fps=30
-#--disable-terrasync
---enable-terrasync
 --disable-auto-coordination
 
 ######################################################################
@@ -127,6 +182,8 @@
 --prop:/sim/rendering/multi-sample-buffers=false
 --prop:/sim/rendering/multi-samples=0
 --disable-rembrandt
+# For symlinks A/C
+--allow-nasal-read=/home/mgouin/Documents/FG
 
 ################################################################
 # terrasync server overrides.
@@ -134,18 +191,19 @@
 # remember to uncomment only one entry at a time.
 # dig terrasync.flightgear.org ANY
 ################################################################
-# Not OK
-#--prop:/sim/terrasync/http-server=automatic
+--enable-terrasync
+#--disable-terrasync
+# OK
+--prop:/sim/terrasync/http-server=automatic
 # Not OK
 #--prop:/sim/terrasync/http-server=https://ukmirror.flightgear.org/fgscenery
 # OK
 #--prop:/sim/terrasync/http-server=https://dream.t3r.de/fgscenery
 # OK
---prop:/sim/terrasync/http-server=https://mpserver16.flightgear.org/scenery
+#--prop:/sim/terrasync/http-server=https://mpserver16.flightgear.org/scenery
 # OK
 #--prop:/sim/terrasync/http-server=http://flightgear.sourceforge.net/scenery
 # Disabled
 #--prop:/sim/terrasync/http-server=http://fgfs.goneabitbursar.com/terrascenery
 #--prop:/sim/terrasync/http-server=http://ns334561.ip-5-196-65.eu/terrasync
 ################################################################
-
